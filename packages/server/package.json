@@ -1,0 +1,45 @@
+{
+  "name": "chat-server",
+  "version": "0.0.1",
+  "description": "The chat room server.",
+  "main": "dist/cli.js",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "serve": "node-r dotenv/config ./dist/server.js",
+    "cleanup": "npm run clean",
+    "dev": "tsc-watch --outDir ./dist --onSuccess \"node -r dotenv/config ./dist/server.js\" --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc",
+    "start": "npm run dev",
+    "build": "tsc -b",
+    "build:domain": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TNOCS/chatty.git"
+  },
+  "keywords": [
+    "node",
+    "lokijs",
+    "REST",
+    "socket.io"
+  ],
+  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TNOCS/chatty/issues"
+  },
+  "homepage": "https://github.com/TNOCS/chatty#readme",
+  "dependencies": {
+    "rest-easy-loki": "^0.7.6",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.5.0",
+    "@types/koa": "2.11.0",
+    "@types/koa-compose": "^3.2.5",
+    "@types/koa-router": "^7.4.0",
+    "@types/koa-static": "^4.0.1",
+    "rimraf": "^3.0.1",
+    "tsc-watch": "^4.1.0",
+    "typescript": "^3.7.5"
+  }
+}

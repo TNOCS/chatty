@@ -1,0 +1,26 @@
+dependencies:
+  rfc6902: 3.0.4
+devDependencies:
+  '@types/geojson': 7946.0.3
+  typescript: 3.7.5
+lockfileVersion: 5.1
+packages:
+  /@types/geojson/7946.0.3:
+    dev: true
+    resolution:
+      integrity: sha512-BYHiG1vQJ7T93uswzuXZ0OBPWqj5tsAPtaMDQADV8sn2InllXarwg9llr6uaW22q1QCwBZ81gVajOpYWzjesug==
+  /rfc6902/3.0.4:
+    dev: false
+    resolution:
+      integrity: sha512-OnzreaZXrwT5w2ikKXWr5QcuI7NZpL+J3hIkAwozjOnKVUL7fPsB8Vcmu8YBiiou1/r3V0Jc0T1uQDyfAPvLzA==
+  /typescript/3.7.5:
+    dev: true
+    engines:
+      node: '>=4.2.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==
+specifiers:
+  '@types/geojson': 7946.0.3
+  rfc6902: ^3.0.4
+  typescript: ^3.7.5

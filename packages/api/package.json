@@ -1,0 +1,34 @@
+{
+  "name": "chatty-api",
+  "version": "0.0.1",
+  "description": "A library to interact with the chat service.",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsc -w",
+    "build": "tsc",
+    "dev": "npm run start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TNOCS/chatty.git"
+  },
+  "keywords": [
+    "REST",
+    "API",
+    "chat"
+  ],
+  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TNOCS/chatty/issues"
+  },
+  "homepage": "https://github.com/TNOCS/chatty#readme",
+  "dependencies": {
+    "rfc6902" : "^3.0.4"
+  },
+  "devDependencies": {
+    "@types/geojson": "7946.0.3",
+    "typescript": "^3.7.5"
+  }
+}
