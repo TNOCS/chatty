@@ -2,6 +2,8 @@ import { ILokiObj } from './loki';
 
 /** A 'chat' message */
 export interface IMessage extends ILokiObj {
+  /** ID of the owner */
+  ownerId?: number;
   /** Specify the layout type */
   layoutType?: string;
   /** Short title to describe the message */

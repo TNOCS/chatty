@@ -137,9 +137,10 @@ export const init = (baseUrl: string, request: <T>(options: IRequestConfig) => P
       if (isNaN(id)) {
         return console.error(`userId is not a number: ${userId}`);
       }
-      return await request<IRoom>({
+      return await request<IRoom[]>({
         method: 'GET',
-        url: `${baseUrl}/rooms?q=${JSON.stringify({ userIds: { $contains: id } })}`,
+        url: `${baseUrl}/rooms`,
+        params: { q: `{"userIds":{"$contains":${id}}}` },
       }).catch(console.error);
     },
     /**
@@ -148,10 +149,11 @@ export const init = (baseUrl: string, request: <T>(options: IRequestConfig) => P
      * where negative values count from the end of the collection.
      * E.g. from 0 to -10 gets the last 10 messages.
      */
-    getMessages: async (roomName: string, from = 0, to = -10) => {
+    getMessages: async (roomName: string /**, from = 0, to = -10 */) => {
       return await request<IMessage[]>({
         method: 'GET',
-        url: `${baseUrl}/${roomName}?from=${from}&to=${to}`,
+        // url: `${baseUrl}/${roomName}?from=${from}&to=${to}`,
+        url: `${baseUrl}/${roomName}`,
       }).catch(console.error);
     },
     /** Save (update or create) a message */
