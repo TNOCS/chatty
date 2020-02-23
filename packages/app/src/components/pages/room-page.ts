@@ -12,7 +12,8 @@ const EditRoom: FactoryComponent<{
   view: ({ attrs: { state, actions } }) => {
     const { saveRoom } = actions;
     const users = state.users.all || [];
-    const room = state.rooms && state.rooms.current ? state.rooms.current : ({} as IRoom);
+    const room =
+      state.rooms && state.rooms.current ? state.rooms.current : ({} as IRoom);
     return m(
       '.row',
       m(LayoutForm, {
@@ -54,8 +55,10 @@ export const RoomPage: FactoryComponent<{
   state: IAppModel;
 }> = () => {
   return {
-    oninit: async ({ attrs: { actions } }) =>
-      actions.getUsers() && actions.getRooms(),
+    oninit: async ({ attrs: { actions } }) => {
+      actions.getUsers();
+      actions.getRooms();
+    },
     view: ({ attrs: { state, actions } }) => {
       const { all: rooms = [], current: room } = state.rooms || {};
       return m('.row', [

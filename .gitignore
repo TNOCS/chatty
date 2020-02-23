@@ -1,4 +1,4 @@
-.*
+.env
 *.db
 *.db.json
 node_modules
@@ -7,3 +7,5 @@ public
 *.orig
 *.tsbuildinfo
 certs/generated
+packages/server/db
+packages/server/upload

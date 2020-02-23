@@ -1,8 +1,22 @@
 import Stream from 'mithril/stream';
-import { IMessage, IRoom, IUser } from '../../../api/src';
 import { merge } from '../utils/mergerino';
-import { userService } from './user-service';
-import { roomService } from './room-service';
+import { IRoomService, IRoomState, roomService } from './room-service';
+import { IUserService, IUserState, userService } from './user-service';
+
+interface IAppState {
+  app: {
+    isSearching?: boolean;
+    searchQuery?: string;
+  };
+}
+
+export interface IAppModel extends IAppState, IUserState, IRoomState {}
+
+export type ModelUpdateFunction =
+  | Partial<IAppModel>
+  | ((model: Partial<IAppModel>) => Partial<IAppModel>)
+  | ((model: Partial<IAppModel>) => Promise<Partial<IAppModel>>);
+export type UpdateStream = Stream<ModelUpdateFunction>;
 
 /** Application state */
 export const appStateMgmt = {
@@ -20,50 +34,14 @@ export const appStateMgmt = {
   },
 };
 
-export interface IAppModel {
-  app: {
-    isSearching?: boolean;
-    searchQuery?: string;
-  };
-  users: {
-    current?: IUser;
-    all?: IUser[];
-  };
-  rooms: {
-    current?: IRoom;
-    all?: IRoom[];
-  };
-  room: { [roomName: string]: IMessage[] };
-}
-
-export interface IActions {
-  getUsers: () => Promise<IUser[]>;
-  getUser: (id: number) => void;
-  setCurrentUser: (user: IUser) => void;
-  saveUser: (user: IUser) => void;
-  deleteUser: (user: IUser) => void;
-  getRooms: () => Promise<IRoom[]>;
-  getRoom: (id: number) => void;
-  setCurrentRoom: (room: IRoom) => void;
-  saveRoom: (room: IRoom) => void;
-  clearRoom: (room: IRoom) => void;
-  // getMessage: (id: number) => void;
-  // getMessages: () => void;
-  // saveMessage: (message: IMessage) => void;
-  // deleteMessage: (message: IMessage) => void;
-}
-
-export type ModelUpdateFunction =
-  | Partial<IAppModel>
-  | ((model: Partial<IAppModel>) => Partial<IAppModel>);
-export type UpdateStream = Stream<ModelUpdateFunction>;
+export interface IActions extends IUserService, IRoomService {}
 
 const app = {
-  initial: { ...appStateMgmt.initial, ...userService.initial },
+  initial: { ...appStateMgmt.initial, ...userService.initial, ...roomService.initial } as IAppModel,
   actions: (us: UpdateStream) =>
     ({ ...userService.actions(us), ...roomService.actions(us) } as IActions),
 };
 
-const update = Stream<ModelUpdateFunction>();
-export const states = Stream.scan(merge, app.initial, update);
+const update = Stream<ModelUpdateFunction>() as UpdateStream;
+export const states = Stream.scan(merge as any, app.initial, update);
 export const actions = app.actions(update);

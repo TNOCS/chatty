@@ -2,7 +2,12 @@ import m, { Attributes, FactoryComponent } from 'mithril';
 
 export const CircularSpinner: FactoryComponent<Attributes> = () => {
   return {
-    view: ({ attrs }) => {
+    view: ({
+      attrs = {
+        className: 'center-align',
+        style: 'margin-top: 20%;',
+      },
+    }) => {
       return m(
         'div',
         attrs,

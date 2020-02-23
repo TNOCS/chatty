@@ -7,7 +7,13 @@ export const assign =
   Object.assign ||
   ((a: any, b: any) => (b && Object.keys(b).forEach(k => (a[k] = b[k])), a));
 
-const run = (isArr: boolean, copy: any, patch: any) => {
+type PatchFunction = <T extends Record<string, any>>(t: T, m: any) => T;
+
+const run = <T extends Record<string, any>>(
+  isArr: boolean,
+  copy: T,
+  patch: T | T[] | PatchFunction
+): T => {
   const type = typeof patch;
   if (patch && type === 'object') {
     if (Array.isArray(patch)) {
@@ -15,8 +21,8 @@ const run = (isArr: boolean, copy: any, patch: any) => {
         copy = run(isArr, copy, p);
       }
     } else {
-      for (const k of Object.keys(patch)) {
-        const val = patch[k];
+      for (const k of Object.keys(patch) as Array<keyof T>) {
+        const val = (patch as T)[k];
         if (typeof val === 'function') {
           copy[k] = val(copy[k], merge);
         } else if (val === undefined) {
@@ -28,14 +34,14 @@ const run = (isArr: boolean, copy: any, patch: any) => {
         ) {
           copy[k] = val;
         } else if (typeof copy[k] === 'object') {
-          copy[k] = val === copy[k] ? val : merge(copy[k], val);
+          copy[k] = val === copy[k] ? val : (merge(copy[k], val) as T[keyof T]);
         } else {
-          copy[k] = run(false, {}, val);
+          copy[k] = run(false, {} as T[keyof T], val);
         }
       }
     }
   } else if (type === 'function') {
-    copy = patch(copy, merge);
+    copy = (patch as PatchFunction)(copy, merge);
   }
   return copy;
 };
@@ -48,12 +54,14 @@ export type ValueOf<U> = U[keyof U];
  * - Patching based on the current value
  * - Deleting properties that are undefined
  *
- * @author Original author, Daniel Loomer, https://github.com/fuzetsu
- * @author TypeScript version, Erik Vullings, https://github.com/erikvullings
- * @param source
- * @param patches
+ * @author Daniel Loomer, https://github.com/fuzetsu
  */
-export const merge = <T extends {}, U>(source: T | T[], ...patches: U[]) => {
+export const merge = <
+  T extends Record<string, any> | ((m: T) => T) | ((m: T) => Promise<T>)
+>(
+  source: T | T[],
+  ...patches: T[]
+) => {
   const isArr = Array.isArray(source);
   return run(
     isArr,
@@ -61,7 +69,3 @@ export const merge = <T extends {}, U>(source: T | T[], ...patches: U[]) => {
     patches
   );
 };
-// export const merge = <T extends {}, K extends keyof T>(
-//   source: T | T[],
-//   ...patches: Array<Partial<T> | { [P in K]?: (v: T[P]) => T[P] }>
-// ) => {
